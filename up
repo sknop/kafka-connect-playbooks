@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# bring up the cluster(s)
+docker-compose up -d
+
+docker-compose logs connect | grep "Kafka Connect started"
+while (( $? == 1 ))
+do
+    sleep 1
+    echo "Waiting for connect to be started ..."
+    docker-compose logs connect | grep "Kafka Connect started"
+done
+
+# create input topic
+
+kafka-topics --create --topic test_topic_json --bootstrap-server localhost:9091
+
+# install connector
+
+curl  -X POST -H "Content-Type: application/json" --data @filestream_dlq_2.json http://localhost:8083/connectors
+
+# see the input
+
+echo INPUT
+cat input.txt
+echo =====
+
+# insert data into input topic
+
+kafka-console-producer --topic test_topic_json --bootstrap-server localhost:9091 < input.txt
+
+# see the output 
+
+echo OUTPUT
+cat output/file_sink_03.txt
+echo ======
+
+kafka-console-consumer --topic dlq_file_sink_02 --bootstrap-server localhost:9092 --from-beginning --max-messages 1
+
+echo FINISHED
+

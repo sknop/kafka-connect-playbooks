@@ -1,0 +1,18 @@
+{        
+    "name": "file_sink_03",
+        "config": {
+                "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+                "topics":"test_topic_json",
+                "value.converter":"org.apache.kafka.connect.json.JsonConverter",
+                "value.converter.schemas.enable": false,
+                "key.converter":"org.apache.kafka.connect.json.JsonConverter",
+                "key.converter.schemas.enable": false,
+                "file": "/data/file_sink_03.txt",
+                "errors.tolerance": "all",
+                "errors.deadletterqueue.topic.name":"dlq_file_sink_03",
+                "errors.deadletterqueue.topic.replication.factor": 1,
+                "producer.override.bootstrap.servers": "kafka-target:19092",
+                "admin.override.bootstrap.servers": "kafka-target:19092"
+        }
+}
+
