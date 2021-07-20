@@ -29,13 +29,17 @@ echo =====
 
 kafka-console-producer --topic test_topic_json --bootstrap-server localhost:9091 < input.txt
 
+# wait a moment
+echo wait 3 seconds ...
+sleep 3
+
 # see the output 
 
 echo OUTPUT
 cat output/file_sink_03.txt
 echo ======
 
-kafka-console-consumer --topic dlq_file_sink_02 --bootstrap-server localhost:9092 --from-beginning --max-messages 1
+kafka-console-consumer --topic dlq_file_sink_03 --bootstrap-server localhost:9092 --from-beginning --max-messages 1
 
 echo FINISHED
 
